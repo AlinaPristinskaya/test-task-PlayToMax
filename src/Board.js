@@ -54,7 +54,7 @@ export default class Board {
 
       if (col < this.cols - 1)
         //перевіряю щоб поточний елемент не стояв країній праворуч
-        stack.push(this.grid[row][col + 1]); // тоді додаю в стек сусіда зліва
+        stack.push(this.grid[row][col + 1]); // тоді додаю в стек сусіда праворуч
     }
 
     return group;
