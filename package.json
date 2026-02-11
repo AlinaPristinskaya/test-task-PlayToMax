@@ -1,0 +1,15 @@
+{
+  "name": "test-task-playtomax",
+  "version": "1.0.0",
+  "description": "Запуск 1. Відкрий проєкт у VS Code 2. Встанови розширення Live Server 3. Відкрий `index.html` → Open with Live Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.8.1"
+  }
+}
