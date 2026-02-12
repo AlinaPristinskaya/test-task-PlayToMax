@@ -11,8 +11,8 @@ export default class Game {
   }
 
   render() {
-    this.container.innerHTML = ''; // Я очищаю контейнер
-    // Я проходжу по кожному рядку матриці і по кожній клітинці в рядку
+    this.container.innerHTML = ''; //очищаю контейнер
+    // Я проходжу по кожній клітинці моєї сторенної двомірниї структури
     this.board.grid.forEach((row) => {
       row.forEach((cell) => {
         // створюю саме button для кожної клітинки тому що зручно
@@ -30,7 +30,7 @@ export default class Game {
         }
         // обробник кліку на кнопку
         button.addEventListener('click', () => {
-          //викликаю метод пошуку групи
+          //викликаю метод пошуку групи передаючи координати клікнутої клітинки
           const group = this.board.findGroup(cell.row, cell.col);
 
           console.log(
