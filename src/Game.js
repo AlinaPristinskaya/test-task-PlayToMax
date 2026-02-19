@@ -1,49 +1,78 @@
-import Board from './Board.js';
-// створюю клас Game який обробляє кліки,
-// викликає логіку Board та рендерить поле
+import Board from "./Board.js";
+
+import {
+  getSquareNeighbors,
+  getTriangleNeighbors,
+  getHexNeighbors,
+} from "./neighbors.js";
+
+import { renderSquare } from "./renderers/squareRenderer.js";
+import { renderTriangle } from "./renderers/triangleRenderer.js";
+import { renderHex } from "./renderers/hexRenderer.js";
+
 export default class Game {
-  constructor(containerId, matrix) {
+  constructor(containerId, matrix, type = "square") {
+    // Получаем контейнер, куда будем рендерить
     this.container = document.getElementById(containerId);
-    //отримую контейнер, у який буду рендерити поле
-    this.board = new Board(matrix);
-    //створюю екземпляр класу Board і передаю туди матрицю
+
+    // Тип сетки: square / triangle / hex
+    this.type = type;
+
+    // 🔥 Выбираем стратегию соседей
+    let getNeighbors;
+
+    if (type === "triangle") {
+      getNeighbors = getTriangleNeighbors;
+    } else if (type === "hex") {
+      getNeighbors = getHexNeighbors;
+    } else {
+      getNeighbors = getSquareNeighbors;
+    }
+
+    // 🔥 Создаём один универсальный Board
+    this.board = new Board(matrix, getNeighbors);
+
+    // Первый рендер
     this.render();
   }
 
+  // Обработчик клика по ячейке
+  handleCellClick = (row, col) => {
+    // Находим группу
+    const group = this.board.findGroup(row, col);
+
+    // Если пусто — ничего не делаем
+    if (!group.length) return;
+
+    console.log(
+      `[${this.type}] group size: ${group.length}, value: ${this.board.grid[row][col].value}`
+    );
+
+    // Удаляем группу
+    this.board.removeGroup(group);
+
+    // Перерисовываем поле
+    this.render();
+  };
+
+  // Рендер
   render() {
-    this.container.innerHTML = ''; //очищаю контейнер
-    // Я проходжу по кожній клітинці моєї сторенної двомірниї структури
-    this.board.grid.forEach((row) => {
-      row.forEach((cell) => {
-        // створюю саме button для кожної клітинки тому що зручно
-        // за допомогою властивості disabled уникнути повторних кліків по тій самій групі
+    // Очищаем контейнер
+    this.container.innerHTML = "";
 
-        const button = document.createElement('button');
-        button.classList.add('cell'); // це для стилів
+    // 🔥 Выбираем нужный renderer
 
-        button.name = cell.value;
-        button.textContent = cell.value;
+    if (this.type === "triangle") {
+      renderTriangle(this.container, this.board, this.handleCellClick);
+      return;
+    }
 
-        // Якщо клітинка "видалена" — кнопка стає неактивною
-        if (!cell.value) {
-          button.disabled = true;
-        }
-        // обробник кліку на кнопку
-        button.addEventListener('click', () => {
-          //викликаю метод пошуку групи передаючи координати клікнутої клітинки
-          const group = this.board.findGroup(cell.row, cell.col);
+    if (this.type === "hex") {
+      renderHex(this.container, this.board, this.handleCellClick);
+      return;
+    }
 
-          console.log(
-            `Виявлено групу з ${group.length} елементів типу ${cell.value}`
-          );
-          //видаляю знайдену групу
-          this.board.removeGroup(group);
-          // перемальовую поле
-          this.render();
-        });
-
-        this.container.appendChild(button);
-      });
-    });
+    // По умолчанию — квадрат
+    renderSquare(this.container, this.board, this.handleCellClick);
   }
 }

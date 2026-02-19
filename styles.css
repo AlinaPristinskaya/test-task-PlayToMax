@@ -1,3 +1,7 @@
+/* =========================
+   GLOBAL
+========================= */
+
 body {
   background: #1e1e1e;
   display: flex;
@@ -5,13 +9,7 @@ body {
   margin-top: 40px;
   font-size: 28px;
   color: #fff;
-  font-family:
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Arial,
-    sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
 .app {
@@ -26,6 +24,10 @@ body {
   opacity: 0.9;
 }
 
+/* =========================
+   SQUARE GRID (buttons)
+========================= */
+
 #board {
   display: grid;
   grid-template-columns: repeat(6, 60px);
@@ -39,6 +41,7 @@ body {
   background: #333;
   border: 1px solid #555;
   cursor: pointer;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,4 +50,42 @@ body {
 
 .cell:hover {
   background: #444;
+}
+
+/* =========================
+   SVG GRIDS (triangle + hex)
+   Same style as .cell
+========================= */
+
+.cell-emoji {
+  font-size: 20px;
+  pointer-events: none; /* clicks go to polygon */
+}
+
+.tri-cell,
+.hex-cell {
+  fill: #333;
+  stroke: #555;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: fill 0.15s ease;
+}
+
+.tri-cell:hover,
+.hex-cell:hover {
+  fill: #444;
+}
+
+/* "removed/empty" cells */
+.tri-empty,
+.hex-empty {
+  fill: #1e1e1e;
+  stroke: #333;
+  opacity: 0.6;
+  cursor: default;
+}
+.cell-emoji {
+  font-size: 20px;
+  pointer-events: none;
+  fill: #fff;
 }
